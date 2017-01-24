@@ -10,8 +10,9 @@
 /libs/
 /doc/doxyfile
 /dist/
-/version
-/include/ddjson/version.h
+
+version
+include/json/version.h
 
 # MSVC project files:
 *.sln
