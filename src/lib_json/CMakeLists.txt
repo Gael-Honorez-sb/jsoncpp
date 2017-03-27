@@ -32,7 +32,7 @@ SET(jsoncpp_sources
                 version.h.in)
 
 file(COPY ${PUBLIC_HEADERS} DESTINATION ${PROJECT_BINARY_DIR}/include/json)
-include_directories(${PROJECT_BINARY_DIR}/include/json)    
+include_directories(${PROJECT_BINARY_DIR}/include)
    
 		
 # Install instructions for this target
