@@ -47,8 +47,11 @@ SET( PUBLIC_HEADERS
     ${JSONCPP_INCLUDE_DIR}/json/reader.h
     ${JSONCPP_INCLUDE_DIR}/json/writer.h
     ${JSONCPP_INCLUDE_DIR}/json/assertions.h
-    ${JSONCPP_INCLUDE_DIR}/json/version.h
     )
+
+file(COPY ${PUBLIC_HEADERS} DESTINATION ${PROJECT_BINARY_DIR}/include/json)
+	
+include_directories(${PROJECT_BINARY_DIR}/include/json)	
 
 SOURCE_GROUP( "Public API" FILES ${PUBLIC_HEADERS} )
 
