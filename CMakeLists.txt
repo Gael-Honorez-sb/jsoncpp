@@ -74,10 +74,11 @@ jsoncpp_parse_version( ${JSONCPP_VERSION} JSONCPP_VERSION )
 MESSAGE(STATUS "JsonCpp Version: ${JSONCPP_VERSION_MAJOR}.${JSONCPP_VERSION_MINOR}.${JSONCPP_VERSION_PATCH}")
 # File version.h is only regenerated on CMake configure step
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/lib_json/version.h.in"
-                "${PROJECT_SOURCE_DIR}/include/json/version.h"
+                "${PROJECT_BINARY_DIR}/include/json/version.h"
                 NEWLINE_STYLE UNIX )
+				
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/version.in"
-                "${PROJECT_SOURCE_DIR}/version"
+                "${PROJECT_BINARY_DIR}/version"
                 NEWLINE_STYLE UNIX )
 
 macro(UseCompilationWarningAsError)

@@ -19,7 +19,6 @@ SET( PUBLIC_HEADERS
     ${JSONCPP_INCLUDE_DIR}/json/reader.h
     ${JSONCPP_INCLUDE_DIR}/json/writer.h
     ${JSONCPP_INCLUDE_DIR}/json/assertions.h
-    ${JSONCPP_INCLUDE_DIR}/json/version.h
     )
 
 SOURCE_GROUP( "Public API" FILES ${PUBLIC_HEADERS} )
@@ -32,6 +31,10 @@ SET(jsoncpp_sources
                 json_writer.cpp
                 version.h.in)
 
+file(COPY ${PUBLIC_HEADERS} DESTINATION ${PROJECT_BINARY_DIR}/include/json)
+include_directories(${PROJECT_BINARY_DIR}/include/json)    
+   
+		
 # Install instructions for this target
 IF(JSONCPP_WITH_CMAKE_PACKAGE)
     SET(INSTALL_EXPORT EXPORT jsoncpp)
