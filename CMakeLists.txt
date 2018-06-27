@@ -9,7 +9,7 @@ OPTION(JSONCPP_WITH_POST_BUILD_UNITTEST "Automatically run unit-tests as a post 
 OPTION(JSONCPP_WITH_WARNING_AS_ERROR "Force compilation to fail if a warning occurs" OFF)
 OPTION(JSONCPP_WITH_STRICT_ISO "Issue all the warnings demanded by strict ISO C and ISO C++" ON)
 OPTION(JSONCPP_WITH_PKGCONFIG_SUPPORT "Generate and install .pc files" ON)
-OPTION(JSONCPP_WITH_CMAKE_PACKAGE "Generate and install cmake package files" OFF)
+OPTION(JSONCPP_WITH_CMAKE_PACKAGE "Generate and install cmake package files" ON)
 OPTION(BUILD_SHARED_LIBS "Build jsoncpp_lib as a shared library." OFF)
 OPTION(BUILD_STATIC_LIBS "Build jsoncpp_lib static library." ON)
 
@@ -59,21 +59,21 @@ ENDMACRO()
 #SET( JSONCPP_VERSION_MAJOR X )
 #SET( JSONCPP_VERSION_MINOR Y )
 #SET( JSONCPP_VERSION_PATCH Z )
-SET( JSONCPP_VERSION 1.8.0 )
+SET( JSONCPP_VERSION 1.8.4 )
 jsoncpp_parse_version( ${JSONCPP_VERSION} JSONCPP_VERSION )
 #IF(NOT JSONCPP_VERSION_FOUND)
 #    MESSAGE(FATAL_ERROR "Failed to parse version string properly. Expect X.Y.Z")
 #ENDIF(NOT JSONCPP_VERSION_FOUND)
-SET( JSONCPP_SOVERSION 11 )
+SET( JSONCPP_SOVERSION 19 )
 SET( JSONCPP_USE_SECURE_MEMORY "0" CACHE STRING "-D...=1 to use memory-wiping allocator for STL" )
 
 MESSAGE(STATUS "JsonCpp Version: ${JSONCPP_VERSION_MAJOR}.${JSONCPP_VERSION_MINOR}.${JSONCPP_VERSION_PATCH}")
 # File version.h is only regenerated on CMake configure step
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/lib_json/version.h.in"
-                "${PROJECT_SOURCE_DIR}/include/json/version.h"
+                "${PROJECT_BINARY_DIR}/include/json/version.h"
                 NEWLINE_STYLE UNIX )
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/version.in"
-                "${PROJECT_SOURCE_DIR}/version"
+                "${PROJECT_BINARY_DIR}/version"
                 NEWLINE_STYLE UNIX )
 
 MACRO(UseCompilationWarningAsError)
@@ -112,8 +112,11 @@ ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow -Wextra")
     # not yet ready for -Wsign-conversion
 
-    IF(JSONCPP_WITH_STRICT_ISO AND NOT JSONCPP_WITH_WARNING_AS_ERROR)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=conversion -pedantic")
+    IF(JSONCPP_WITH_STRICT_ISO)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    ENDIF()
+    IF(JSONCPP_WITH_WARNING_AS_ERROR)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=conversion")
     ENDIF()
 ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     # using Intel compiler

@@ -1,4 +1,4 @@
-// Copyright 2007-2010 Baptiste Lepilleur
+// Copyright 2007-2010 Baptiste Lepilleur and The JsonCpp Authors
 // Distributed under MIT license, or public domain if desired and
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
@@ -12,9 +12,9 @@
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <deque>
 #include <iosfwd>
+#include <istream>
 #include <stack>
 #include <string>
-#include <istream>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
@@ -52,11 +52,13 @@ public:
   /** \brief Constructs a Reader allowing all features
    * for parsing.
    */
+  JSONCPP_DEPRECATED("Use CharReader and CharReaderBuilder instead")
   Reader();
 
   /** \brief Constructs a Reader allowing the specified feature set
    * for parsing.
    */
+  JSONCPP_DEPRECATED("Use CharReader and CharReaderBuilder instead")
   Reader(const Features& features);
 
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
@@ -149,7 +151,9 @@ public:
    * \return \c true if the error was successfully added, \c false if either
    * Value offset exceeds the document size.
    */
-  bool pushError(const Value& value, const JSONCPP_STRING& message, const Value& extra);
+  bool pushError(const Value& value,
+                 const JSONCPP_STRING& message,
+                 const Value& extra);
 
   /** \brief Return whether there are any errors.
    * \return \c true if there are no errors to report \c false if
@@ -216,7 +220,8 @@ private:
                                    Location& current,
                                    Location end,
                                    unsigned int& unicode);
-  bool addError(const JSONCPP_STRING& message, Token& token, Location extra = 0);
+  bool
+  addError(const JSONCPP_STRING& message, Token& token, Location extra = 0);
   bool recoverFromError(TokenType skipUntilToken);
   bool addErrorAndRecover(const JSONCPP_STRING& message,
                           Token& token,
@@ -230,6 +235,9 @@ private:
   void addComment(Location begin, Location end, CommentPlacement placement);
   void skipCommentTokens(Token& token);
 
+  static bool containsNewLine(Location begin, Location end);
+  static JSONCPP_STRING normalizeEOL(Location begin, Location end);
+
   typedef std::stack<Value*> Nodes;
   Nodes nodes_;
   Errors errors_;
@@ -242,7 +250,7 @@ private:
   JSONCPP_STRING commentsBefore_;
   Features features_;
   bool collectComments_;
-};  // Reader
+}; // Reader
 
 /** Interface for reading JSON from a char array.
  */
@@ -251,7 +259,8 @@ public:
   virtual ~CharReader() {}
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    document.
-   * The document must be a UTF-8 encoded string containing the document to read.
+   * The document must be a UTF-8 encoded string containing the document to
+   read.
    *
    * \param beginDoc Pointer on the beginning of the UTF-8 encoded string of the
    document to read.
@@ -266,9 +275,10 @@ public:
    * \return \c true if the document was successfully parsed, \c false if an
    error occurred.
    */
-  virtual bool parse(
-      char const* beginDoc, char const* endDoc,
-      Value* root, JSONCPP_STRING* errs) = 0;
+  virtual bool parse(char const* beginDoc,
+                     char const* endDoc,
+                     Value* root,
+                     JSONCPP_STRING* errs) = 0;
 
   class JSON_API Factory {
   public:
@@ -277,8 +287,8 @@ public:
      * \throw std::exception if something goes wrong (e.g. invalid settings)
      */
     virtual CharReader* newCharReader() const = 0;
-  };  // Factory
-};  // CharReader
+  }; // Factory
+};   // CharReader
 
 /** \brief Build a CharReader implementation.
 
@@ -308,7 +318,8 @@ public:
     - `"strictRoot": false or true`
       - true if root must be either an array or an object value
     - `"allowDroppedNullPlaceholders": false or true`
-      - true if dropped null placeholders are allowed. (See StreamWriterBuilder.)
+      - true if dropped null placeholders are allowed. (See
+    StreamWriterBuilder.)
     - `"allowNumericKeys": false or true`
       - true if numeric object keys are allowed.
     - `"allowSingleQuotes": false or true`
@@ -322,9 +333,10 @@ public:
       - If true, `parse()` returns false when extra non-whitespace trails
         the JSON value in the input string.
     - `"rejectDupKeys": false or true`
-      - If true, `parse()` returns false when a key is duplicated within an object.
+      - If true, `parse()` returns false when a key is duplicated within an
+    object.
     - `"allowSpecialFloats": false or true`
-      - If true, special float values (NaNs and infinities) are allowed 
+      - If true, special float values (NaNs and infinities) are allowed
         and their values are lossfree restorable.
 
     You can examine 'settings_` yourself
@@ -363,13 +375,13 @@ public:
 };
 
 /** Consume entire stream and use its begin/end.
-  * Someday we might have a real StreamReader, but for now this
-  * is convenient.
-  */
-bool JSON_API parseFromStream(
-    CharReader::Factory const&,
-    JSONCPP_ISTREAM&,
-    Value* root, std::string* errs);
+ * Someday we might have a real StreamReader, but for now this
+ * is convenient.
+ */
+bool JSON_API parseFromStream(CharReader::Factory const&,
+                              JSONCPP_ISTREAM&,
+                              Value* root,
+                              std::string* errs);
 
 /** \brief Read from 'sin' into 'root'.
 
