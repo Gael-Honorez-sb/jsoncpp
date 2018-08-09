@@ -73,9 +73,6 @@ CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/lib_json/version.h.in"
                 "${PROJECT_BINARY_DIR}/include/json/version.h"
                 NEWLINE_STYLE UNIX )
 				
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/version.in"
-                "${PROJECT_BINARY_DIR}/version"
-                NEWLINE_STYLE UNIX )
 
 MACRO(UseCompilationWarningAsError)
     IF(MSVC)

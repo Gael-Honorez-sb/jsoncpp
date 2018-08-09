@@ -14,6 +14,8 @@ INCLUDE(CheckTypeSize)
 INCLUDE(CheckStructHasMember)
 INCLUDE(CheckCXXSymbolExists)
 
+
+include_directories(${PROJECT_BINARY_DIR}/include)
 check_include_file_cxx(clocale HAVE_CLOCALE)
 check_cxx_symbol_exists(localeconv clocale HAVE_LOCALECONV)
 

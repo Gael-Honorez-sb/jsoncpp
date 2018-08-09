@@ -138,7 +138,7 @@
 
 #if !defined(JSON_IS_AMALGAMATION)
 
-# include "version.h"
+# include "json/version.h"
 
 # if JSONCPP_USING_SECURE_MEMORY
 #  include "allocator.h" //typedef Allocator
